@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="featurepages.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Sleep Visualization</title>
+</head>
+<body>
+<div id="header">
+    <div class="container">
+        <nav>
+            <ul id="sidemenu">
+                <li><a href="../main.html">Home</a></li>
+                <li><a href="consumption.html">Food/Water</a></li>
+                <li><a href="exercise.html">Exercise</a></li>
+                <li><a href="sleep.html">Sleep</a></li>
+                <i class="fas fa-solid fa-xmark" onclick="closemenu()"></i>
+            </ul>
+            <i class="fas fa-solid fa-bars" onclick="openmenu()"></i>
+        </nav>
+        <div class="header-text">
+            <h1 id="headertxt">Sleep Visualization<br></h1>
+            <p class="description">Ensure your pet stays well rested by tracking your sleep habits.</p>
+        </div> 
+    </div>
+</div>
+
+<div class="chart-section">
+    <h2>Sleep Visualization</h2>
+    <label for="dateInput">Select a Date:</label>
+    <input type="date" id="dateInput" value="">
+    <br><br>
+    <label for="sleepInput">Enter Hours Slept:</label>
+    <input type="number" id="sleepInput" min="0" max="24" value="8" step="0.1">
+    <button onclick="updateCharts()">Update</button>
+
+    <div id="sleepCircle" style="height: 300px;"></div>
+    <div id="sleepBarChart" style="height: 400px;"></div>
+</div>
+
+<script>
+    // Initialize today's date in the input
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('dateInput').value = today;
+
+    // Simulated sleep data (replace with real backend integration if needed)
+    const sleepData = {
+        "2025-01-18": 7,
+        "2025-01-19": 6,
+        "2025-01-20": 8, // Example for today
+        "2025-01-21": 5
+    };
+
+    // Function to update the charts
+    function updateCharts() {
+        const selectedDate = document.getElementById('dateInput').value;
+        let hoursSlept = parseFloat(document.getElementById('sleepInput').value) || 0;
+
+        // Update the sleep data for the selected date
+        sleepData[selectedDate] = hoursSlept;
+
+        // Update Circle Chart
+        const circleData = [{
+            type: "pie",
+            values: [hoursSlept, 24 - hoursSlept],
+            hole: 0.6,
+            textinfo: "none",
+            marker: {
+                colors: ["#4CAF50", "#333"]
+            }
+        }];
+
+        const circleLayout = {
+            title: `Sleep for ${selectedDate} (${hoursSlept} hrs)`,
+            titlefont: { color: 'white' },
+            plot_bgcolor: '#080808',
+            paper_bgcolor: '#080808',
+            font: { color: 'white' },
+            showlegend: false
+        };
+
+        Plotly.newPlot('sleepCircle', circleData, circleLayout);
+
+        // Update Bar Chart (showing sleep data for multiple days)
+        const barData = [{
+            x: Object.keys(sleepData),
+            y: Object.values(sleepData),
+            type: 'bar',
+            marker: { color: 'lightblue' }
+        }];
+
+        const barLayout = {
+            title: '4 Day Sleep Breakdown',
+            titlefont: { color: 'white' },
+            xaxis: { title: 'Date', titlefont: { color: 'white' }, tickfont: { color: 'white' } },
+            yaxis: { title: 'Hours Slept', titlefont: { color: 'white' }, tickfont: { color: 'white' } },
+            plot_bgcolor: '#080808',
+            paper_bgcolor: '#080808',
+            font: { color: 'white' }
+        };
+
+        Plotly.newPlot('sleepBarChart', barData, barLayout);
+    }
+
+    // Initialize the charts with default data
+    updateCharts();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #080808;
+    color: #ffffff;
+}
+
+#header {
+    width: 100%;
+    height: 100vh;
+    background-image: url(images/background.png); /* Placeholder for feature page background */
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    padding: 5px 10%;
+}
+
+nav {
+    display: block;
+    width: 100%;
+    background: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    z-index: 1000;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+}
+
+nav:hover {
+    background-color: #2a4237;
+}
+
+nav ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 10px 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.header-text {
+    margin-top: 15%;
+}
+
+.header-text h1 span {
+    color: #8affb7;
+}
+
+/* Adjust chart section styles */
+.chart-section-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    gap: 20px; /* Add space between the charts */
+}
+
+.chart-section {
+    top: 1000px;
+    margin-top: 200px;
+    margin-bottom: 20px;
+    background-color: #080808;
+    padding: 15px;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.chart-section h2 {
+    text-align: center;
+    color: white;
+}
+
+.chart-section input,
+.chart-section button {
+    margin: 10px 0;
+    padding: 10px;
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 16px;
+}
+
+/* Resize chart containers */
+#foodChart, #waterChart {
+    width: 100%; /* Ensure charts take full width of their section */
+    height: 250px; /* Reduce height for smaller size */
+    margin: auto;
+}
+
+/* Change input field background and color */
+.chart-section input {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 5px;
+}
+
+.chart-section button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.chart-section button:hover {
+    background-color: #45a049;
+}
+

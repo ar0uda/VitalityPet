@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="featurepages.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/9e4757fc7b.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Food & Water</title>
+</head>
+<body>
+<div id="header">
+    <div class="container">
+        <nav>
+            <ul id="sidemenu">
+                <li><a href="../main.html">Home</a></li>
+                <li><a href="consumption.html">Food/Water</a></li>
+                <li><a href="exercise.html">Exercise</a></li>
+                <li><a href="sleep.html">Sleep</a></li>
+            </ul>
+        </nav>
+        <div class="header-text">
+            <h1 id="headertxt">Food & Water<br></h1>
+            <p class="description">Welcome to the food and water section. Here, you'll find useful insights for maintaining your pets satiety levels.</p>
+        </div> 
+    </div>
+</div>
+
+<!-- Food and Water Chart Inputs -->
+<div class="chart-section">
+    <h2>Food Consumption Chart</h2>
+    <label for="foodXInput">Food X-Axis Data:</label>
+    <input type="text" id="foodXInput" value="1,2,3,4,5" placeholder="Enter Food X data">
+    <br>
+    <label for="foodYInput">Food Y-Axis Data:</label>
+    <input type="text" id="foodYInput" value="10,12,14,16,18" placeholder="Enter Food Y data">
+    <br>
+    <button onclick="updateFoodChart()">Update Food Chart</button>
+    <div id="foodChart"></div>
+</div>
+
+<div class="chart-section">
+    <h2>Water Consumption Chart</h2>
+    <label for="waterXInput">Water X-Axis Data:</label>
+    <input type="text" id="waterXInput" value="1,2,3,4,5" placeholder="Enter Water X data (comma-separated)">
+    <br>
+    <label for="waterYInput">Water Y-Axis Data:</label>
+    <input type="text" id="waterYInput" value="2,4,6,8,10" placeholder="Enter Water Y data (comma-separated)">
+    <br>
+    <button onclick="updateWaterChart()">Update Water Chart</button>
+    <div id="waterChart"></div>
+</div>
+
+<script>
+    // Function to update the Food Chart
+    function updateFoodChart() {
+        const foodXData = document.getElementById('foodXInput').value.split(',').map(Number);
+        const foodYData = document.getElementById('foodYInput').value.split(',').map(Number);
+
+        const foodData = [{
+            x: foodXData,
+            y: foodYData,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'orange'}
+        }];
+
+        const foodLayout = {
+            title: 'Food Consumption',
+            titlefont: {color: 'white'},
+            xaxis: { 
+                title: 'Days',
+                titlefont: {color: 'white'},
+                tickfont: {color: 'white'}
+            },
+            yaxis: { 
+                title: 'Amount Consumed (g)',
+                titlefont: {color: 'white'},
+                tickfont: {color: 'white'}
+            },
+            plot_bgcolor: '#080808',
+            paper_bgcolor: '#080808',
+            font: {color: 'white'}
+        };
+
+        Plotly.newPlot('foodChart', foodData, foodLayout);
+    }
+
+    // Function to update the Water Chart
+    function updateWaterChart() {
+        const waterXData = document.getElementById('waterXInput').value.split(',').map(Number);
+        const waterYData = document.getElementById('waterYInput').value.split(',').map(Number);
+
+        const waterData = [{
+            x: waterXData,
+            y: waterYData,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'blue'}
+        }];
+
+        const waterLayout = {
+            title: 'Water Consumption',
+            titlefont: {color: 'white'},
+            xaxis: { 
+                title: 'Days',
+                titlefont: {color: 'white'},
+                tickfont: {color: 'white'}
+            },
+            yaxis: { 
+                title: 'Amount Consumed (liters)',
+                titlefont: {color: 'white'},
+                tickfont: {color: 'white'}
+            },
+            plot_bgcolor: '#080808',
+            paper_bgcolor: '#080808',
+            font: {color: 'white'}
+        };
+
+        Plotly.newPlot('waterChart', waterData, waterLayout);
+    }
+
+    // Initialize the charts with default data
+    updateFoodChart();
+    updateWaterChart();
+</script>
+
+</body>
+</html>

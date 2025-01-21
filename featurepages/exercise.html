@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="featurepages.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Exercise Visualization</title>
+</head>
+<body>
+<div id="header">
+    <div class="container">
+        <nav>
+            <ul id="sidemenu">
+                <li><a href="../main.html">Home</a></li>
+                <li><a href="consumption.html">Food/Water</a></li>
+                <li><a href="exercise.html">Exercise</a></li>
+                <li><a href="sleep.html">Sleep</a></li>
+            </ul>
+        </nav>
+        <div class="header-text">
+            <h1 id="headertxt">Physical Activity Tracking<br></h1>
+            <p class="description">Make sure your pet's moving about with interactive and customizable pie charts.</p>
+        </div> 
+    </div>
+</div>
+
+<div class="chart-section">
+    <h2>Exercise Visualization</h2>
+    <label for="exerciseCategoryInput">Exercise Category:</label>
+    <input type="text" id="exerciseCategoryInput" placeholder="Enter exercise category (e.g., Running)">
+    <br><br>
+    <label for="exerciseHoursInput">Hours Spent:</label>
+    <input type="number" id="exerciseHoursInput" min="0" max="24" value="1" step="0.1">
+    <br><br>
+    <button onclick="addExercise()">Add Exercise</button>
+
+    <div id="exercisePieChart" style="height: 400px;"></div>
+</div>
+
+<script>
+    // Initializing the exercise data object (Category -> Hours)
+    let exerciseData = {};
+
+    // Function to add an exercise and update the chart
+    function addExercise() {
+        const category = document.getElementById('exerciseCategoryInput').value.trim();
+        const hours = parseFloat(document.getElementById('exerciseHoursInput').value) || 0;
+
+        if (category && hours > 0) {
+            // Add or update the category with the given hours
+            if (exerciseData[category]) {
+                exerciseData[category] += hours; // Add to the existing category
+            } else {
+                exerciseData[category] = hours; // New category
+            }
+
+            // Clear the input fields
+            document.getElementById('exerciseCategoryInput').value = '';
+            document.getElementById('exerciseHoursInput').value = 1;
+
+            // Update the pie chart with the new data
+            updatePieChart();
+        } else {
+            alert('Please enter a valid category and hours.');
+        }
+    }
+
+    // Function to update the pie chart with the latest data
+    function updatePieChart() {
+        const categories = Object.keys(exerciseData);
+        const hours = Object.values(exerciseData);
+
+        const pieData = [{
+            type: 'pie',
+            labels: categories,
+            values: hours,
+            textinfo: 'percent+label',
+            marker: {
+                colors: ['#4CAF50', '#FFC107', '#2196F3', '#FF5722', '#9C27B0', '#00BCD4'] // Color for each slice
+            }
+        }];
+
+        const pieLayout = {
+            title: 'Exercise Time Distribution',
+            titlefont: { color: 'white' },
+            plot_bgcolor: '#080808',
+            paper_bgcolor: '#080808',
+            font: { color: 'white' },
+            showlegend: true
+        };
+
+        Plotly.newPlot('exercisePieChart', pieData, pieLayout);
+    }
+
+    // Initialize the chart with empty data (empty pie chart)
+    updatePieChart();
+</script>
+
+</body>
+</html>
