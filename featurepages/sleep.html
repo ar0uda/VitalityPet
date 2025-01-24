@@ -27,6 +27,7 @@
         <div class="header-text">
             <h1 id="headertxt">Sleep Visualization<br></h1>
             <p class="description">Ensure your pet stays well rested by tracking your sleep habits.</p>
+            <img id="statusimg" src="statuspet.gif" alt="image of pet">
         </div> 
     </div>
 </div>
@@ -49,8 +50,8 @@
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('dateInput').value = today;
 
-    // Simulated sleep data (replace with real backend integration if needed)
-    const sleepData = {
+    // Retrieve saved sleep data from localStorage or initialize with default values
+    const savedData = JSON.parse(localStorage.getItem('sleepData')) || {
         "2025-01-18": 7,
         "2025-01-19": 6,
         "2025-01-20": 8, // Example for today
@@ -63,7 +64,10 @@
         let hoursSlept = parseFloat(document.getElementById('sleepInput').value) || 0;
 
         // Update the sleep data for the selected date
-        sleepData[selectedDate] = hoursSlept;
+        savedData[selectedDate] = hoursSlept;
+
+        // Save the updated sleep data to localStorage
+        localStorage.setItem('sleepData', JSON.stringify(savedData));
 
         // Update Circle Chart
         const circleData = [{
@@ -89,14 +93,14 @@
 
         // Update Bar Chart (showing sleep data for multiple days)
         const barData = [{
-            x: Object.keys(sleepData),
-            y: Object.values(sleepData),
+            x: Object.keys(savedData),
+            y: Object.values(savedData),
             type: 'bar',
             marker: { color: 'lightblue' }
         }];
 
         const barLayout = {
-            title: '4 Day Sleep Breakdown',
+            title: 'Amount of sleep you and your pet have gotten (week)',
             titlefont: { color: 'white' },
             xaxis: { title: 'Date', titlefont: { color: 'white' }, tickfont: { color: 'white' } },
             yaxis: { title: 'Hours Slept', titlefont: { color: 'white' }, tickfont: { color: 'white' } },
@@ -108,7 +112,7 @@
         Plotly.newPlot('sleepBarChart', barData, barLayout);
     }
 
-    // Initialize the charts with default data
+    // Initialize the charts with default or saved data
     updateCharts();
 </script>
 

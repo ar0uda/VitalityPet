@@ -25,6 +25,7 @@
         <div class="header-text">
             <h1 id="headertxt">Physical Activity Tracking<br></h1>
             <p class="description">Make sure your pet's moving about with interactive and customizable pie charts.</p>
+            <img id="statusimg" src="statuspet.gif" alt="image of pet">
         </div> 
     </div>
 </div>
@@ -37,16 +38,26 @@
     <label for="exerciseHoursInput">Hours Spent:</label>
     <input type="number" id="exerciseHoursInput" min="0" max="24" value="1" step="0.1">
     <br><br>
+    <label for="dayInput">Select Day:</label>
+    <input type="date" id="dayInput">
+    <br><br>
     <button onclick="addExercise()">Add Exercise</button>
+    <button onclick="saveDayData()">Save Day Data</button>
+    <button onclick="loadDayData()">Load Day Data</button>
 
+    <!-- New chart section for total hours of exercise -->
+    <div id="exerciseBarChart" style="height: 400px;"></div>
+
+    <!-- Pie chart section -->
     <div id="exercisePieChart" style="height: 400px;"></div>
 </div>
 
 <script>
     // Initializing the exercise data object (Category -> Hours)
     let exerciseData = {};
+    const storageKey = "exerciseTracking";
 
-    // Function to add an exercise and update the chart
+    // Function to add an exercise and update the charts
     function addExercise() {
         const category = document.getElementById('exerciseCategoryInput').value.trim();
         const hours = parseFloat(document.getElementById('exerciseHoursInput').value) || 0;
@@ -63,8 +74,9 @@
             document.getElementById('exerciseCategoryInput').value = '';
             document.getElementById('exerciseHoursInput').value = 1;
 
-            // Update the pie chart with the new data
+            // Update the charts with the new data
             updatePieChart();
+            updateBarChart();
         } else {
             alert('Please enter a valid category and hours.');
         }
@@ -97,8 +109,69 @@
         Plotly.newPlot('exercisePieChart', pieData, pieLayout);
     }
 
-    // Initialize the chart with empty data (empty pie chart)
+    // Function to update the bar chart showing total hours exercised for the day
+    function updateBarChart() {
+        const totalHours = Object.values(exerciseData).reduce((total, hours) => total + hours, 0);
+
+        const barData = [{
+            type: 'bar',
+            x: ['Total Exercise Hours'],
+            y: [totalHours],
+            marker: { color: '#4CAF50' }
+        }];
+
+        const barLayout = {
+            title: 'How much you and your pet have exercised today',
+            titlefont: { color: 'white' },
+            plot_bgcolor: '#080808',
+            paper_bgcolor: '#080808',
+            font: { color: 'white' },
+            showlegend: false
+        };
+
+        Plotly.newPlot('exerciseBarChart', barData, barLayout);
+    }
+
+    // Function to save exercise data for a specific day
+    function saveDayData() {
+        const selectedDay = document.getElementById('dayInput').value;
+        if (!selectedDay) {
+            alert('Please select a valid day.');
+            return;
+        }
+
+        let savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
+        savedData[selectedDay] = exerciseData;
+
+        localStorage.setItem(storageKey, JSON.stringify(savedData));
+        alert('Data saved for ' + selectedDay);
+    }
+
+    // Function to load exercise data for a specific day
+    function loadDayData() {
+        const selectedDay = document.getElementById('dayInput').value;
+        if (!selectedDay) {
+            alert('Please select a valid day.');
+            return;
+        }
+
+        const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
+        if (savedData[selectedDay]) {
+            exerciseData = savedData[selectedDay];
+            updatePieChart();
+            updateBarChart();
+            alert('Data loaded for ' + selectedDay);
+        } else {
+            alert('No data found for ' + selectedDay);
+            exerciseData = {}; // Reset data
+            updatePieChart();
+            updateBarChart();
+        }
+    }
+
+    // Initialize the charts with empty data (empty pie chart and bar chart)
     updatePieChart();
+    updateBarChart();
 </script>
 
 </body>
